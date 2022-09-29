@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DNAScanner</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <link rel="apple-touch-icon" href="">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{url_for('static',filename = 'main.css')}}">
+    </head>
+    <body>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand push-right" href="{{ url_for('uploader') }}">DNAScanner</a>
+            <div class="ml-auto dropdown push-left">
+                <a href="{{ url_for('contact') }}" class="c-nav-link">Contact</a>
+                <a class="dropdown-toggle c-nav-link" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Help
+                </a>
+                <ul class="dropdown-menu push-left" aria-labelledby="dropdownMenuButton1">
+                  <li><a class="dropdown-item" href="{{ url_for('documentation') }}">Documentation</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('parameters_page') }}">Parameters</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('result_interpretation') }}">Result Interpretation of DNAScanner</a></li>
+                </ul>
+              </div>
+            
+        </nav>
+        <div class="container m-5">   
+                {% block content %}{% endblock %}
+            </div>
+                
+        <div class="container">
+            <div class="m_row m_m-2 card bg-light p-5 m-5">
+                <p>DNA SCANNER scans genomic DNA for a number of different physicochemical properties by incorporating biophysical, thermodynamic, protein interactions and sequence based features.</p>
+                <p>DNA Scanner is maintained by the <a href="https://www.google.com/url?q=http://kamalrawal.in&amp;source=gmail-html&amp;ust=1663308053933000&amp;usg=AOvVaw0dXLGsOiwtOjTBHAq5eCIp" target="_blank" rel="noreferrer">Dr Kamal Rawal and team</a>. In case you use DNA Scanner for your research purposes, we would greatly appreciate it if you cite our publications.</p>
+                <ul>
+                    <li><p>Kamal Rawal, Ram Ramaswamy, Genome-wide analysis of mobile genetic element insertion sites, Nucleic Acids Research, Volume 39, Issue 16, 1 September 2011, Pages 6864â6878, <a href="https://www.google.com/url?q=https://doi.org/10.1093/nar/gkr337&amp;source=gmail-html&amp;ust=1663308053933000&amp;usg=AOvVaw1bJrRfXyzzs7YwNGqbiU_3" target="_blank" rel="noreferrer">https://doi.org/10.1093/nar/<wbr>gkr337</a></p></li>
+                </ul>
+                <p><b>For any queries and bug reports feel free to contact us at <a href="mailto:rawalgenomicslab@gmail.com" target="_blank" rel="noreferrer">rawalgenomicslab@gmail.com</a></b></p>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+          <script>
+                function validateFasta(fasta) {
+
+if (!fasta) { // check there is something first of all
+    return false;
+}
+
+// immediately remove trailing spaces
+fasta = fasta.trim();
+
+// split on newlines... 
+var lines = fasta.split('\n');
+
+// check for header
+if (fasta[0] == '>') {
+    // remove one line, starting at the first position
+    lines.splice(0, 1);
+}
+
+// join the array back into a single string without newlines and 
+// trailing or leading spaces
+fasta = lines.join('').trim();
+
+if (!fasta) { // is it empty whatever we collected ? re-check not efficient 
+    return false;
+}
+
+// note that the empty string is caught above
+// allow for Selenocysteine (U)
+return /^[ACGT\s]+$/i.test(fasta);
+}
+                $(function() {
+                    $("#parameters li").addClass('list-inline-item m-2');
+                    var valid = 0;
+                    var fasta_example = '>sequence 1 \
+ggtaagtcctctagtacaaacacccccaatattgtgatataattaaaattatattcatat\
+tctgttgccagaaaaaacacttttaggctatattagagccatcttctttgaagcgttgtc';
+
+                    $('#example-btn').click(function() {
+                        $("#example-text").toggle();
+                        $('#fasta_text').val(fasta_example);
+                        $('#fasta_text').change();
+                    });
+                    $("#fasta_text").on('change keyup paste', function() {
+                        max_sequence = $(this).val();
+                        valid = validateFasta(max_sequence);
+                        $("#info-text h5").text(max_sequence);
+                        if (valid == false) {
+                            $("#info-text h5").text("This is a DNA sequence.");
+                        }
+                    });
+                    $('.param-label').each(function() {
+                        $(this).text($(this).text().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' '))
+                    });
+                })
+          </script>
+    </body>
+</html>

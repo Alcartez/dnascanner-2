@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="m_col-12 m_align-self-center m_content-background m_p-4 m_mt-2 card bg-light p-3" id="info-begin">
+    <p><strong>Kindly, read the following points before using DNA Scanner:</strong></p>
+    <ol>
+        <li>
+            Currently, you can submit nucleotide sequences in FASTA format. <strong>(<a rel="noreferrer">?</a>)</strong> Copy and paste your FASTA-formatted sequences into the textbox below or upload a file containing your sequences in FASTA format from your device.
+        </li>
+        <li>
+            If you provide your email then you&#39;ll receive an email containing your result link after the server completes the analysis of your input. Otherwise, you can also <strong>bookmark the waiting page</strong> (appears right after you submit your input) to check your results later.
+        </li>
+    </ol>
+    <p><strong>This site is viewed best in latest browsers (mobile browsers also included) with JavaScript enabled</strong></p>
+</div>
+<div class="content-section m-5 card bg-light p-5">
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Input DNA Sequence</legend>
+            
+            <div class="form-group">
+            {{ form.fasta_text.label(class="form-control-label")}}          
+            {{ form.fasta_text(class="form-control form-control-lg")}}
+            </div>
+                <div class="btn-example m-3">
+                    <button class="btn btn-outline-warning" id="example-btn" type="button">Example</button>
+                </div>
+                <div id="info-text">
+                    <h5></h5>
+                </div>
+   
+            <div class="form-group m-3">
+                {{ form.fasta_file(class="form-control")}}
+                </div>
+                <div class="form-group m-3">         
+                    {{ form.windowWidth(class="form-control form-control-lg", placeholder="Enter Window Width", required = True)}}
+                    </div>
+                <div class="form-group m-3">                
+                {{ form.email(class="form-control", placeholder="Enter your email address (Optional)")}}
+                </div>
+                <div class="card m-3">
+                    <div class="card-header">
+                        <h3>Dinucleotide</h3>
+                    </div>
+                    <div class="card-body">
+                        {% for param in parameters['Dinucleotide'] %}
+                        <div class="form-check chk m-2">
+                            <input type="checkbox" name="{{param}}" class="form-check-input">
+                            <label class="form-check-label param-label" for="options">{{ param }}</label> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                  </div>
+                  <div class="card m-3">
+                    <div class="card-header">
+                        <h3>Trinucleotide</h3>
+                    </div>
+                    <div class="card-body">
+                        {% for param in parameters['Trinucleotide'] %}
+                        <div class="form-check chk m-2">
+                            <input type="checkbox" name="{{param}}" class="form-check-input">
+                            <label class="form-check-label param-label" for="options">{{ param }}</label> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                  </div>
+                <div id="btns">
+                <div class="m-3">
+                    {{ form.submit(class = "btn btn-outline-info") }}
+                </div>
+                <div class="m-3">
+                <input type="reset" value="Reset" class="btn btn-outline-warning">
+                </div>
+            </div>
+            </fieldset>
+            </form>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories = True) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{category}}">
+                  {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <div class="m_row m_mt-3 m_font-md card bg-light p-5">
+                    <div class="m_col-md-7 m_col-12">
+                        <div class="m_row">
+                            <div class="m_col-12">
+                                <b>Restrictions enforced:</b>
+                            </div>
+                            <div class="m_col-12">
+                                <ul>
+                                    <li>Minimum 30 residues per sequence are required</li>
+                                    <li>Maximum 4000 residues per sequence are allowed (Bacteria only)</li>
+                                    <li>Maximum 200000 total residues in an input are allowed (Bacteria only)</li>
+                                    <li>Per request 100 protein sequences are allowed. Rest are ignored</li>
+                                    <li>Only protein sequence is allowed</li>
+                                    <li>Only FASTA format or UniProt ID is allowed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+{% endblock content %}
