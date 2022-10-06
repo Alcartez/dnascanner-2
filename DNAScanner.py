@@ -165,7 +165,8 @@ def ParameterCheck(record_list,n):
 
         # Export dataframe as csv
         print(record.name + " writing to CSV ...")
-        param_df.to_csv('static/Output/' + new_folder + '/Parameters/Param_' + record.name + '_' + nString +"Nucleotide" + '.csv')
+        if param_df.columns[1] in param_df:
+             param_df.to_csv('static/Output/' + new_folder + '/Parameters/Param_' + record.name + '_' + nString +"Nucleotide" + '.csv')
 
         spl = []
         for sp in range(len(param_df.index)):
