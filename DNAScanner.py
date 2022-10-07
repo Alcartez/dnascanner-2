@@ -173,7 +173,7 @@ def ParameterCheck(record_list,n):
         #Plotting
         for col_val in param_df.columns.values[1:] :
             ## PLOTLY ##
-            print("Parameters : Making Plotly Graph ...")
+            print(col_val + " : Making Plotly Graph ...")
             fig = px.line(param_df, x=spl, y=col_val,)
             fig.update_xaxes(rangeslider_visible=True)
             fig.update_layout(title=str(col_val)+" Parameter",xaxis_title="Position",yaxis_title=str(col_val))         
